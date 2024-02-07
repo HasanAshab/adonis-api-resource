@@ -1,0 +1,37 @@
+{{#var resourceName = generators.resourceName(entity.name)}}
+{{#var resourceFileName = generators.resourceFileName(entity.name)}}
+{{{
+  exports({
+    to: app.makePath(entity.path, resourceFileName)
+  })
+}}}
+
+{{#var entity = generators.createEntity(name)}}
+{{#var modelName = generators.modelName(entity.name)}}
+{{#var resourceFileName = string(modelName).snakeCase().suffix('_resource').ext('.ts').toString()}}
+{{{
+  exports({
+    to: app.makePath('app/api_resources', entity.path, resourceFileName)
+  })
+}}}
+
+{#if flags.collection }}
+import ResourceCollection from '@hasanashab/resources/resource_collection'
+
+export default class {{ modelName }}Collection extends ResourceCollection {
+  public serialize() {
+    return {
+      data: this.collection
+    }
+  }
+}
+
+{{#else}}
+import JsonResource from '@hasanashab/resources/json_resource'
+
+export default class {{ modelName }}Resource extends JsonResource {
+  public serialize() {
+    return this.resource.toJSON()
+  }
+}
+{{/if}}
