@@ -9,27 +9,23 @@ export class ResourceCollection<
   protected collects: Resource = JsonResource as Resource
   declare protected collection: Item[]
 
-  constructor(
-    protected readonly resources: Array<Record<string, any>>,
-    ..._: any[] | never
-  ) {}
+  constructor(protected readonly resources: Array<Record<string, any>>) {}
 
-  static make<T extends typeof ResourceCollection<typeof JsonResource>>(
-    this: T,
-    ...args: ConstructorParameters<T>
-  ) {
-    const [resources, ...data] = args
-    return new this(resources, ...data)
-   }
 
   dontWrap() {
     this.shouldWrap = false
     return this
   }
 
-  protected makeResource(resource: Record<string, any>): Item {
-    return this.collects.make(resource)
+  protected makeResource(resource: Record<string, any>) {
+    return new this.collects(resource)
   }
+
+
+  protected makeCollection(resources: Record<string, any>[]) {
+    this.collection = resources.map((resource) => this.makeResource(resource).dontWrap() as Item)
+  }
+
 
   protected serialize() {
     return this.shouldWrap || this.resources instanceof SimplePaginator
@@ -37,10 +33,6 @@ export class ResourceCollection<
           [(this.collects as any).wrap]: this.collection,
         }
       : this.collection
-  }
-
-  protected makeCollection(resources: Record<string, any>[]) {
-    this.collection = resources.map((resource) => this.makeResource(resource).dontWrap())
   }
 
   toJSON() {
