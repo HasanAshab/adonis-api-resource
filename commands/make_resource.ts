@@ -25,7 +25,6 @@ export default class MakeResource extends BaseCommand {
   })
   declare collection: boolean
 
-
   /**
    * Execute command
    */
