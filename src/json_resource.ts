@@ -14,7 +14,10 @@ export class JsonResource {
   protected shouldWrap = true
 
 
-  constructor(protected readonly resource: Record<string, any>) {}
+  constructor(
+    protected readonly resource: Record<string, any>,
+    ..._: any[]
+    ) {}
 
   /**
    * Creates a collection of anonymous resources from an array of resource.
@@ -37,10 +40,21 @@ export class JsonResource {
     return this
   }
 
+  /**
+   * Serializes the resource.
+   *
+   * @return {any} the serialized resource
+   */
   serialize() {
     return this.resource.toJSON?.() ?? this.resource
   }
 
+  
+  /**
+   * Converts the resource to a JSON representation.
+   *
+   * @return {object} The JSON representation of the object.
+   */
   toJSON() {
     return this.shouldWrap
       ? {
@@ -49,6 +63,14 @@ export class JsonResource {
       : this.serialize()
   }
 
+  
+  /**
+   * Returns the value if the condition is true, otherwise undefined.
+   *
+   * @param {boolean} condition - description of parameter
+   * @param {unknown | (() => unknown)} value - description of parameter
+   * @return {unknown} description of return value
+   */
   protected when(condition: boolean, value: unknown | (() => unknown)) {
     if (!condition) return
     return typeof value === 'function' ? value() : value
