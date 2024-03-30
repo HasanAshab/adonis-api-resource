@@ -26,7 +26,7 @@ export class JsonResource<Data extends object = Record<string, any>> {
    */
   static collection<
     T extends typeof JsonResource,
-    D extends object = T extends JsonResource<infer V> ? V : never 
+    D extends object = InstanceType<T> extends JsonResource<infer V> ? V : never 
   >(
     this: T,
     resources: Array<D>
@@ -35,10 +35,7 @@ export class JsonResource<Data extends object = Record<string, any>> {
   }
 
   /**
-   *  Dont wrap the resource in the response
-   *
-   *  @param {type} paramName - description of parameter
-   *  @return {type} description of return value
+   *  Dont wrap the collection in the response
    */
   dontWrap() {
     this.shouldWrap = false

@@ -1,21 +1,41 @@
 import { ResourceCollection } from './resources/resource_collection.js'
 import { JsonResource } from './resources/json_resource.js'
 
-class Test extends JsonResource {
+
+interface User {
+  id: number
+  name: string
+  email: string
+}
+
+class Test extends JsonResource<User> {
   constructor(
-    protected readonly resource: Record<string, any>,
-    protected readonly foo: string
+    protected resource: User,
+    protected foo: string
   ) {
     super(resource)
   }
 
   serialize() {
-    return this.resource.toJSON()
+    return this.resource
   }
 }
 
+
+ResourceCollection.for(Test).make([
+  {
+    id: 1,
+    name: 'Hasan',
+    email: 'h@h.com'
+  }
+])
+
+
+
+
+
 class TestCollection extends ResourceCollection<typeof Test> {
-  protected makeResource(resource: Record<string, any>): JsonResource {
+  protected makeResource(resource: User) {
     return new this.collects(resource, 'foo')
   }
 
@@ -30,5 +50,6 @@ new TestCollection([
   {
     id: 1,
     name: 'Hasan',
+    email: 'h@h.com'
   },
 ])

@@ -1,11 +1,24 @@
+import { AnonymousResourceCollection } from './anonymous_resource_collection.js'
 import { JsonResource } from './json_resource.js'
 import { SimplePaginator } from '@adonisjs/lucid/database'
 
 export class ResourceCollection<
-  Resource extends typeof JsonResource,
+  Resource extends typeof JsonResource<any>,
   Item = InstanceType<Resource>,
-  Data extends object = Resource extends JsonResource<infer V> ? V : never 
+  Data extends object = Item extends JsonResource<infer V> ? V : never
 > {
+
+  static for<
+    Resource extends typeof JsonResource<any>,
+    Data extends object = InstanceType<Resource> extends JsonResource<infer V> ? V : never
+  >(jsonResource: Resource) {
+    const make = (resources: Array<Data>) => {
+      return new AnonymousResourceCollection(resources, jsonResource)
+    }
+    return { make }
+  }
+
+  
   /**
    * Whether the resource should be wrapped
    * @type {boolean}
@@ -28,9 +41,6 @@ export class ResourceCollection<
 
   /**
    *  Dont wrap the collection in the response
-   *
-   *  @param {type} paramName - description of parameter
-   *  @return {type} description of return value
    */
   dontWrap() {
     this.shouldWrap = false
