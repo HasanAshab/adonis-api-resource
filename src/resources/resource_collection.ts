@@ -1,4 +1,4 @@
-import { AnonymousResourceCollection } from './anonymous_resource_collection.js'
+import { AnonymousCollectionBuilder } from '../anonymous_collection_builder.js'
 import { JsonResource } from './json_resource.js'
 import { SimplePaginator } from '@adonisjs/lucid/database'
 
@@ -8,16 +8,16 @@ export class ResourceCollection<
   Data extends object = Item extends JsonResource<infer V> ? V : never
 > {
 
+  /**
+   * Creates a collection of anonymous resources for a json resource.
+   *
+   * @param {Resource} jsonResource - The resource class to use for collecting
+   */
   static for<
-    Resource extends typeof JsonResource<any>,
-    Data extends object = InstanceType<Resource> extends JsonResource<infer V> ? V : never
+    Resource extends typeof JsonResource<any>
   >(jsonResource: Resource) {
-    const make = (resources: Array<Data>) => {
-      return new AnonymousResourceCollection(resources, jsonResource)
-    }
-    return { make }
+    return new AnonymousCollectionBuilder(jsonResource)
   }
-
   
   /**
    * Whether the resource should be wrapped
@@ -70,7 +70,7 @@ export class ResourceCollection<
   /**
    * Serializes the collection.
    *
-   * @return {any} the serialized resource
+   * @return {object} the serialized resource
    */
   protected serialize() {
     return this.shouldWrap || this.resources instanceof SimplePaginator

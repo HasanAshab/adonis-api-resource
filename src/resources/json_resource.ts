@@ -18,22 +18,7 @@ export class JsonResource<Data extends object = Record<string, any>> {
     ..._: any[]
   ) {}
 
-  /**
-   * Creates a collection of anonymous resources from an array of resources.
-   *
-   * @param {Array<Resource>} resources - The array of resources to create the collection from.
-   * @return {AnonymousResourceCollection} - The created collection of anonymous resources.
-   */
-  static collection<
-    T extends typeof JsonResource,
-    D extends object = InstanceType<T> extends JsonResource<infer V> ? V : never 
-  >(
-    this: T,
-    resources: Array<D>
-  ) {
-    return new AnonymousResourceCollection(resources, this);
-  }
-
+  
   /**
    *  Dont wrap the collection in the response
    */
@@ -45,7 +30,7 @@ export class JsonResource<Data extends object = Record<string, any>> {
   /**
    * Serializes the resource.
    *
-   * @return {any} the serialized resource
+   * @return {object} the serialized resource
    */
   serialize() {
     if ('toJSON' in this.resource && typeof this.resource.toJSON === 'function') {
@@ -71,9 +56,9 @@ export class JsonResource<Data extends object = Record<string, any>> {
   /**
    * Returns the value if the condition is true, otherwise undefined.
    *
-   * @param {boolean} condition - description of parameter
-   * @param {unknown | (() => unknown)} value - description of parameter
-   * @return {unknown} description of return value
+   * @param {boolean} condition - If true then return the value
+   * @param {unknown | (() => unknown)} value - The value to return
+   * @return {unknown} - The value
    */
   protected when(condition: boolean, value: unknown | (() => unknown)) {
     if (!condition) return

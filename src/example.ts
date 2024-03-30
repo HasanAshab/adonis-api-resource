@@ -11,7 +11,8 @@ interface User {
 class Test extends JsonResource<User> {
   constructor(
     protected resource: User,
-    protected foo: string
+    protected foo: string,
+    protected bar: number
   ) {
     super(resource)
   }
@@ -36,7 +37,7 @@ ResourceCollection.for(Test).make([
 
 class TestCollection extends ResourceCollection<typeof Test> {
   protected makeResource(resource: User) {
-    return new this.collects(resource, 'foo')
+    return new this.collects(resource, 'foo', 1)
   }
 
   serialize() {
