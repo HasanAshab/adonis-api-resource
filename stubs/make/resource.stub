@@ -16,7 +16,7 @@
 }}}
 
 {#if flags.collection }}
-import ResourceCollection from '@hasanashab/resources/resource_collection'
+import { ResourceCollection } from 'adonis-api-resource'
 
 export default class {{ modelName }}Collection extends ResourceCollection {
   public serialize() {
@@ -27,7 +27,7 @@ export default class {{ modelName }}Collection extends ResourceCollection {
 }
 
 {{#else}}
-import JsonResource from '@hasanashab/resources/json_resource'
+import { JsonResource } from 'adonis-api-resource'
 
 export default class {{ modelName }}Resource extends JsonResource {
   public serialize() {
