@@ -1,7 +1,6 @@
 import { ResourceCollection } from './resources/resource_collection.js'
 import { JsonResource } from './resources/json_resource.js'
 
-
 interface User {
   id: number
   name: string
@@ -22,18 +21,13 @@ class Test extends JsonResource<User> {
   }
 }
 
-
 ResourceCollection.for(Test).make([
   {
     id: 1,
     name: 'Hasan',
-    email: 'h@h.com'
-  }
+    email: 'h@h.com',
+  },
 ])
-
-
-
-
 
 class TestCollection extends ResourceCollection<typeof Test> {
   protected makeResource(resource: User) {
@@ -51,6 +45,6 @@ new TestCollection([
   {
     id: 1,
     name: 'Hasan',
-    email: 'h@h.com'
+    email: 'h@h.com',
   },
 ])

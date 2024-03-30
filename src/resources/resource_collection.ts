@@ -5,20 +5,17 @@ import { SimplePaginator } from '@adonisjs/lucid/database'
 export class ResourceCollection<
   Resource extends typeof JsonResource<any>,
   Item = InstanceType<Resource>,
-  Data extends object = Item extends JsonResource<infer V> ? V : never
+  Data extends object = Item extends JsonResource<infer V> ? V : never,
 > {
-
   /**
    * Creates a collection of anonymous resources for a json resource.
    *
    * @param {Resource} jsonResource - The resource class to use for collecting
    */
-  static for<
-    Resource extends typeof JsonResource<any>
-  >(jsonResource: Resource) {
+  static for<Resource extends typeof JsonResource<any>>(jsonResource: Resource) {
     return new AnonymousCollectionBuilder(jsonResource)
   }
-  
+
   /**
    * Whether the resource should be wrapped
    * @type {boolean}

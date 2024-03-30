@@ -1,5 +1,3 @@
-import { AnonymousResourceCollection } from './anonymous_resource_collection.js'
-
 export class JsonResource<Data extends object = Record<string, any>> {
   /**
    * The key used to wrap the resource in the response
@@ -18,7 +16,6 @@ export class JsonResource<Data extends object = Record<string, any>> {
     ..._: any[]
   ) {}
 
-  
   /**
    *  Dont wrap the collection in the response
    */
@@ -34,9 +31,9 @@ export class JsonResource<Data extends object = Record<string, any>> {
    */
   serialize() {
     if ('toJSON' in this.resource && typeof this.resource.toJSON === 'function') {
-      return this.resource.toJSON() 
+      return this.resource.toJSON()
     }
-    
+
     return this.resource
   }
 
