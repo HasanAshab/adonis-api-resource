@@ -1,5 +1,5 @@
-import { ResourceCollection } from './resource_collection.js'
-import { JsonResource } from './json_resource.js'
+import { ResourceCollection } from './resources/resource_collection.js'
+import { JsonResource } from './resources/json_resource.js'
 
 class Test extends JsonResource {
   constructor(

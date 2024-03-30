@@ -1,6 +1,6 @@
 import { AnonymousResourceCollection } from './anonymous_resource_collection.js'
 
-export class JsonResource {
+export class JsonResource<Data extends object = Record<string, any>> {
   /**
    * The key used to wrap the resource in the response
    * @type {string}
@@ -14,18 +14,24 @@ export class JsonResource {
   protected shouldWrap = true
 
   constructor(
-    protected readonly resource: Record<string, any>,
+    protected resource: Data,
     ..._: any[]
   ) {}
 
   /**
-   * Creates a collection of anonymous resources from an array of resource.
+   * Creates a collection of anonymous resources from an array of resources.
    *
-   * @param {Array<Record<string, any>>} resources - The array of records to create the collection from.
+   * @param {Array<Resource>} resources - The array of resources to create the collection from.
    * @return {AnonymousResourceCollection} - The created collection of anonymous resources.
    */
-  static collection(resources: Array<Record<string, any>>) {
-    return new AnonymousResourceCollection(resources, this)
+  static collection<
+    T extends typeof JsonResource,
+    D extends object = T extends JsonResource<infer V> ? V : never 
+  >(
+    this: T,
+    resources: Array<D>
+  ) {
+    return new AnonymousResourceCollection(resources, this);
   }
 
   /**
@@ -45,7 +51,11 @@ export class JsonResource {
    * @return {any} the serialized resource
    */
   serialize() {
-    return this.resource.toJSON?.() ?? this.resource
+    if ('toJSON' in this.resource && typeof this.resource.toJSON === 'function') {
+      return this.resource.toJSON() 
+    }
+    
+    return this.resource
   }
 
   /**

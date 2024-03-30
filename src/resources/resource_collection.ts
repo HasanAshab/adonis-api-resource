@@ -4,6 +4,7 @@ import { SimplePaginator } from '@adonisjs/lucid/database'
 export class ResourceCollection<
   Resource extends typeof JsonResource,
   Item = InstanceType<Resource>,
+  Data extends object = Resource extends JsonResource<infer V> ? V : never 
 > {
   /**
    * Whether the resource should be wrapped
@@ -23,7 +24,7 @@ export class ResourceCollection<
    */
   protected declare collection: Item[]
 
-  constructor(protected readonly resources: Array<Record<string, any>>) {}
+  constructor(protected resources: Array<Data>) {}
 
   /**
    *  Dont wrap the collection in the response
@@ -42,7 +43,7 @@ export class ResourceCollection<
    * @param {Record<string, any>} resource - The resource object to be used for creating the new instance.
    * @return {InstanceType<this['collects']>} - A new instance of the `collects` class.
    */
-  protected makeResource(resource: Record<string, any>) {
+  protected makeResource(resource: Data) {
     return new this.collects(resource)
   }
 
@@ -52,7 +53,7 @@ export class ResourceCollection<
    * @param {Record<string, any>[]} resources -
    * @return {void}
    */
-  protected makeCollection(resources: Record<string, any>[]) {
+  protected makeCollection(resources: Data[]) {
     this.collection = resources.map((resource) => this.makeResource(resource).dontWrap() as Item)
   }
 

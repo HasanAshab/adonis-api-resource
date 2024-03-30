@@ -1,6 +1,6 @@
 {
   "name": "adonis-api-resource",
-  "description": "",
+  "description": "API resources for AdonisJS",
   "version": "0.0.1",
   "engines": {
     "node": ">=18.16.0"
@@ -62,6 +62,13 @@
     "@adonisjs/lucid": {
       "optional": true
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HasanAshab/adonis-api-resource.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HasanAshab/adonis-api-resource/issues"
   },
   "publishConfig": {
     "access": "public",
